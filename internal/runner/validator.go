@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/asaskevich/govalidator"
-	"github.com/pwnesia/dnstake/internal/errors"
-	"github.com/pwnesia/dnstake/internal/option"
+	"github.com/m-1tZ/dnstake2/internal/errors"
+	"github.com/m-1tZ/dnstake2/internal/option"
 )
 
 func validate(opt *option.Options) error {

@@ -6,12 +6,12 @@ import (
 	"os"
 
 	"github.com/logrusorgru/aurora"
+	"github.com/m-1tZ/dnstake2/internal/errors"
+	"github.com/m-1tZ/dnstake2/internal/option"
+	"github.com/m-1tZ/dnstake2/pkg/dnstake"
+	"github.com/m-1tZ/dnstake2/pkg/fingerprint"
 	"github.com/projectdiscovery/gologger"
 	"github.com/projectdiscovery/retryabledns"
-	"github.com/pwnesia/dnstake/internal/errors"
-	"github.com/pwnesia/dnstake/internal/option"
-	"github.com/pwnesia/dnstake/pkg/dnstake"
-	"github.com/pwnesia/dnstake/pkg/fingerprint"
 )
 
 // New to execute target hostname
@@ -50,9 +50,9 @@ func New(opt *option.Options, hostname string) {
 		}
 	}
 
-        if out != "" {
-            fmt.Println(out)
-        }
+	if out != "" {
+		fmt.Println(out)
+	}
 }
 
 func writeToFile(data, output string) {

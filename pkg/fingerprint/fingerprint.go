@@ -80,6 +80,11 @@ func Get() []DNS {
 			Pattern:  `^ns\-cloud\-[\w]+\.go{2}gledomains\.com$`,
 		},
 		{
+			Provider: "Hostinger",
+			Status:   []int{1, 3},
+			Pattern:  `^ns[1-2]\.dns-parking\.com$`,
+		},
+		{
 			Provider: "Hover",
 			Status:   []int{0},
 			Pattern:  `^ns[1-2]\.hover\.com$`,

@@ -15,7 +15,7 @@ DNS takeover vulnerabilities occur when a subdomain (subdomain.example.com) or d
 
 ### from Binary
 
-The ez way! You can download a pre-built binary from [releases page](https://github.com/pwnesia/dnstake/releases), just unpack and run!
+The ez way! You can download a pre-built binary from [releases page](https://github.com/m-1tZ/dnstake2/releases), just unpack and run!
 
 ### from Source
 
@@ -26,7 +26,7 @@ The ez way! You can download a pre-built binary from [releases page](https://git
 Very quick & clean!
 
 ```bash
-▶ go install github.com/pwnesia/dnstake/cmd/dnstake@latest
+▶ go install github.com/m-1tZ/dnstake2/cmd/dnstake@latest
 ```
 
 #### — or
@@ -34,7 +34,7 @@ Very quick & clean!
 Manual building executable from source code:
 
 ```bash
-▶ git clone https://github.com/pwnesia/dnstake
+▶ git clone https://github.com/m-1tZ/dnstake2
 ▶ cd dnstake/cmd/dnstake
 ▶ go build .
 ▶ (sudo) mv dnstake /usr/local/bin

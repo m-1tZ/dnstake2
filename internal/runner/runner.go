@@ -1,8 +1,8 @@
 package runner
 
 import (
-	"github.com/pwnesia/dnstake/internal/executor"
-	"github.com/pwnesia/dnstake/internal/option"
+	"github.com/m-1tZ/dnstake2/internal/executor"
+	"github.com/m-1tZ/dnstake2/internal/option"
 	"github.com/remeh/sizedwaitgroup"
 )
 
