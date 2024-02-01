@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/m-1tZ/dnstake/internal/option"
-	"github.com/m-1tZ/dnstake/internal/runner"
+	"github.com/m-1tZ/dnstake2/internal/option"
+	"github.com/m-1tZ/dnstake2/internal/runner"
 	"github.com/projectdiscovery/gologger"
 	"github.com/projectdiscovery/gologger/levels"
 )

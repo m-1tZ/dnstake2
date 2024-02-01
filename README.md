@@ -1,4 +1,6 @@
-# DNSTake
+# DNSTake2
+
+**MODIFIED VERSION OF https://github.com/pwnesia/dnstake**
 
 <img src="https://user-images.githubusercontent.com/25837540/131214165-06cb74c3-2754-48a6-a13d-bfcf592e646a.png" width="480" alt="DNSTake" title="DNSTake">
 
@@ -35,7 +37,6 @@ Manual building executable from source code:
 
 ```bash
 ▶ git clone https://github.com/m-1tZ/dnstake2
-▶ cd dnstake/cmd/dnstake
 ▶ go build .
 ▶ (sudo) mv dnstake /usr/local/bin
 ```
@@ -47,7 +48,7 @@ $ dnstake -h
 
   ·▄▄▄▄   ▐ ▄ .▄▄ ·▄▄▄▄▄ ▄▄▄· ▄ •▄ ▄▄▄ .
   ██▪ ██ •█▌▐█▐█ ▀.•██  ▐█ ▀█ █▌▄▌▪▀▄.▀·
-  ▐█· ▐█▌▐█▐▐▌▄▀▀▀█▄▐█.▪▄█▀▀█ ▐▀▀▄·▐▀▀▪▄
+  ▐█· ▐█▌▐█▐▐▌▄▀▀▀█▄▐█.▪▄█▀▀█ ▐▀▀▄·▐▀▀▪▄ 2
   ██. ██ ██▐█▌▐█▄▪▐█▐█▌·▐█ ▪▐▌▐█.█▌▐█▄▄▌
   ▀▀▀▀▀• ▀▀ █▪ ▀▀▀▀ ▀▀▀  ▀  ▀ ·▀  ▀ ▀▀▀
 

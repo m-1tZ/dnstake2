@@ -19,6 +19,7 @@ const (
   -c, --concurrent <i>        Set the concurrency level (default: 25)
   -s, --silent                Suppress errors and/or clean output
   -o, --output <FILE>         Save vulnerable hosts to FILE
+  -g, --gandiapikey <APIKEY>  Gandi API Key to check existence of base domain - important
   -h, --help                  Display its help`
 	examples = `
   dnstake -t (sub.)domain.tld
