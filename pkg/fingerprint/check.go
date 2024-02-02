@@ -3,19 +3,25 @@ package fingerprint
 import "regexp"
 
 // Check do fingerprinting
-func Check(NS []string) (DNS, string, error) {
+// Could be vuln and not
+// nsone.net
+// awsdns-21.com
+// TODO: return both states 1 and 0 in this case
+func Check(NS []string) (DNS, []string, error) {
+	vulnerables := []string{}
+	fingerprint := DNS{}
 	for _, f := range Get() {
 		for _, r := range NS {
+
 			m, e := regexp.MatchString(f.Pattern, r)
 			if e != nil {
-				return DNS{}, "", e
+				return DNS{}, nil, e
 			}
-
 			if m {
-				return f, r, nil
+				vulnerables = append(vulnerables, r)
+				fingerprint = f
 			}
 		}
 	}
-
-	return DNS{}, "", nil
+	return fingerprint, vulnerables, nil
 }

@@ -6,12 +6,12 @@ func Get() []DNS {
 	return []DNS{
 		{
 			Provider: "000Domains",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^(fw)?ns[\d]\.000domains\.com$`,
 		},
 		{
 			Provider: "AWS Route 53",
-			Status:   []int{0},
+			Status:   []int{1}, //https://github.com/indianajson/can-i-take-over-dns/issues/1
 			Pattern:  `^ns\-([\w]{4}\.awsdns\-[\w]{2}\.(co\.uk|org)|[\w]{3}\.awsdns\-[\w]{2}\.(com|net))$`,
 		},
 		{
@@ -26,7 +26,7 @@ func Get() []DNS {
 		},
 		{
 			Provider: "Cloudflare",
-			Status:   []int{2},
+			Status:   []int{1},
 			Pattern:  `^[\w]+\.ns\.cloudflare\.com$`,
 		},
 		{
@@ -46,7 +46,7 @@ func Get() []DNS {
 		},
 		{
 			Provider: "Domain.com",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^ns[1-2]\.domain\.com$`,
 		},
 		{
@@ -56,12 +56,12 @@ func Get() []DNS {
 		},
 		{
 			Provider: "Dotster",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^ns[12]\.(nameresolve|dotster)\.com$`,
 		},
 		{
 			Provider: "Dotster",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^ns[12]\.(nameresolve|dotster)\.com$`,
 		},
 		{
@@ -81,7 +81,7 @@ func Get() []DNS {
 		},
 		{
 			Provider: "Hostinger",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^ns[1-2]\.dns-parking\.com$`,
 		},
 		{
@@ -106,12 +106,12 @@ func Get() []DNS {
 		},
 		{
 			Provider: "MyDomain",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^ns[1-2]\.mydomain\.com$`,
 		},
 		{
 			Provider: "Name.com",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^ns[1-4][\w]+?\.name\.com$`,
 		},
 		{
@@ -122,7 +122,7 @@ func Get() []DNS {
 		{
 			Provider: "NS1",
 			Status:   []int{1},
-			Pattern:  `^dns[1-4]\.p[\d]{,2}\.nsone\.net$`,
+			Pattern:  `^dns[1-4]\.p[\d]{2}\.nsone\.net$`, // important fix here
 		},
 		{
 			Provider: "TierraNet",
@@ -131,7 +131,7 @@ func Get() []DNS {
 		},
 		{
 			Provider: "Reg.ru",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^ns[1-2]\.reg\.ru$`,
 		},
 		{
@@ -141,7 +141,7 @@ func Get() []DNS {
 		},
 		{
 			Provider: "Yahoo Small Business",
-			Status:   []int{1, 3},
+			Status:   []int{1},
 			Pattern:  `^yns[1-2]\.yahoo\.com$`,
 		},
 	}

@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/main.go",
-            "args": ["-t","github.com"]
+            "args": ["-t","github.com", "-g", "c2a8cc98ce6a8eedc61d6f8621cfef2fc1d20bc1"]
         }
     ]
 }

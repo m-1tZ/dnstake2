@@ -25,6 +25,7 @@ const (
   dnstake -t (sub.)domain.tld
   dnstake -t hosts.txt
   dnstake -t hosts.txt -o ./dnstake.out
+  dnstake -t hosts.txt -g gandiapikey -o ./dnstake.out
   cat hosts.txt | dnstake
   subfinder -silent -d domain.tld | dnstake
   `

@@ -1,0 +1,7 @@
+tests/*
+bin/*
+dist/*
+*.txt
+checked_domains.db
+vscode/
+dnstake

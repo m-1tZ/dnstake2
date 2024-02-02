@@ -2,8 +2,13 @@ package executor
 
 import (
 	"bufio"
+	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/logrusorgru/aurora"
 	"github.com/m-1tZ/dnstake2/internal/errors"
@@ -14,9 +19,23 @@ import (
 	"github.com/projectdiscovery/retryabledns"
 )
 
+var (
+	opts *option.Options
+	db   *sql.DB
+	err  error
+)
+
 // New to execute target hostname
 func New(opt *option.Options, hostname string) {
 	var out = ""
+	// globally available in package
+	opts = opt
+
+	// setup db for dedupe apex domains
+	db, err = createOrOpenDB("/tmp/checked_domains.db")
+	if err != nil {
+		gologger.Error().Msgf("%s: %s", "DBcreateError", err.Error())
+	}
 
 	vuln, DNS, err := exec(hostname)
 	if err != nil {
@@ -99,44 +118,114 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 		return vuln, DNS, fmt.Errorf("%s", errors.ErrNoNSRec)
 	}
 
-	// TODO check base domain from ns servers
-	// baseDomain()
-	// for _, ns := range q1.NS {
-	// 	apexDomain(ns)
+	// check base domain from ns servers that are not in the list
+	if opts.GandiApiKey != "" {
+		matched, matchedDomain, err := domainAvailable(q1.NS)
+		if err != nil {
+			gologger.Error().Msgf("Error in domain availability check: %s", err)
+		}
+		if matched {
+			return vuln, fingerprint.DNS{Provider: matchedDomain, Status: []int{1}, Pattern: "apex domain available"}, nil
+		}
+	}
 
-	// }
-
-	// TODO, only checks if one regex matches, if so then returns vulnerable status like awsdns but nsone could also be serving
 	// checks if NS servers are in the vulnerable list
-	fgp, rec, err := fingerprint.Check(q1.NS)
+	fgp, recs, err := fingerprint.Check(q1.NS)
 	if err != nil {
 		return vuln, fgp, fmt.Errorf("%s (%s)", errors.ErrPattern, err.Error())
 	}
 
-	if rec == "" {
+	if len(recs) == 0 {
 		return false, fgp, fmt.Errorf("%s", errors.ErrFinger)
 	}
 
 	// checks if ns server is likely to be vulnerable
-	if _, m := find(fgp.Status, 0); m {
+	if _, m := find(fgp.Status, 1); !m {
 		return vuln, DNS, fmt.Errorf("%s", errors.ErrNotVuln)
 	}
 
-	// resolves ns nameservers
-	q2, err := dnstake.Resolve(client, rec, 1)
-	if err != nil {
-		return vuln, DNS, fmt.Errorf("%s (%s)", errors.ErrResolve, rec)
+	// Check domain against each NS server
+	for _, rec := range recs {
+		q2, err := dnstake.Resolve(client, rec, 1)
+		if err != nil {
+			return vuln, DNS, fmt.Errorf("%s (%s)", errors.ErrResolve, rec)
+		}
+		// checks host against each IP of ns record for weird status
+		vuln, err = dnstake.Verify(q2.A, hostname)
+		if err != nil {
+			return vuln, DNS, fmt.Errorf("%s (%s)", errors.ErrVerify, err.Error())
+		}
+
+		if vuln {
+			return vuln, fgp, nil
+		}
 	}
 
-	// checks host against each ns record for weird status
-	vuln, err = dnstake.Verify(q2.A, hostname)
-	if err != nil {
-		return vuln, DNS, fmt.Errorf("%s (%s)", errors.ErrVerify, err.Error())
+	return false, fingerprint.DNS{}, nil
+}
+
+func domainAvailable(domains []string) (bool, string, error) {
+	// TODO handle rate limit
+	// TODO dedupe apexdomains to check and save within a structure to prevent checkin this over and over again
+	var dedupedDomains []string
+
+	for _, domain := range domains {
+		apDomain := apexDomain(domain)
+		checked, err := isDomainChecked(db, apDomain)
+		if err != nil {
+			return false, "", err
+		}
+		if !checked {
+			dedupedDomains = append(dedupedDomains, apDomain)
+		}
 	}
 
-	if vuln {
-		return vuln, fgp, nil
-	}
+	for _, domain := range dedupedDomains {
+		// Gandi.net API endpoint for domain availability check
+		apiEndpoint := fmt.Sprintf("https://api.gandi.net/v5/domain/check?name=%s", domain)
+		// Create an HTTP client
+		client := &http.Client{}
 
-	return false, fgp, fmt.Errorf("%s", errors.ErrUnknown)
+		// Create a request with the Gandi.net API key
+		req, err := http.NewRequest("GET", apiEndpoint, nil)
+		if err != nil {
+			return false, "", err
+		}
+		req.Header.Set("Authorization", "Bearer "+opts.GandiApiKey)
+
+		// Make the API request
+		resp, err := client.Do(req)
+		if err != nil {
+			return false, "", err
+		}
+		defer resp.Body.Close()
+
+		// Read the response body
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return false, "", err
+		}
+
+		// Check if the domain is available
+		if resp.StatusCode == http.StatusOK {
+			var response DomainAvailabilityResponse
+			err := json.Unmarshal(body, &response)
+			if err != nil {
+				return false, "", err
+			}
+
+			// Assuming there is only one product in the response
+			if len(response.Products) > 0 {
+				// apex domain is available!!!
+				if response.Products[0].Status == "available" {
+					return true, domain, nil
+				}
+			}
+		} else {
+			gologger.Error().Msg("Timeout from Gandi - either got into rate limit or connectivity issues")
+			time.Sleep(60 * time.Second)
+		}
+
+	}
+	return false, "", nil
 }
