@@ -3,5 +3,5 @@ bin/*
 dist/*
 *.txt
 checked_domains.db
-vscode/
+.vscode/
 dnstake
