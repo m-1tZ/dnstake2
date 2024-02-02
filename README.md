@@ -86,6 +86,6 @@ Currently supported DNS providers, see [here](https://github.com/indianajson/can
 - [1] https://github.com/indianajson/can-i-take-over-dns#what-is-a-dns-takeover
 - https://0xpatrik.com/subdomain-takeover-ns/
 
-## License
-
-**DNSTake** is distributed under MIT. See `LICENSE`.
+# TODO
+- Resolve CNAMEs accordingly
+- Use fasthttp of golang to increase performance 
