@@ -4,4 +4,4 @@ dist/*
 *.txt
 checked_domains.db
 .vscode/
-dnstake
+dnstake2
