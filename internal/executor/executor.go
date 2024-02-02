@@ -112,7 +112,7 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 		return vuln, DNS, fmt.Errorf("%s", errors.ErrResolve)
 	}
 
-	fmt.Println(q1)
+	//fmt.Println(q1)
 
 	if len(q1.NS) < 1 {
 		return vuln, DNS, fmt.Errorf("%s", errors.ErrNoNSRec)

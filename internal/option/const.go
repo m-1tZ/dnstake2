@@ -2,7 +2,7 @@ package option
 
 const (
 	version = "1.0"
-	author  = "m1tz"
+	author  = "pwnesia + m1tz"
 	banner  = `
   ·▄▄▄▄   ▐ ▄ .▄▄ ·▄▄▄▄▄ ▄▄▄· ▄ •▄ ▄▄▄ .
   ██▪ ██ •█▌▐█▐█ ▀.•██  ▐█ ▀█ █▌▄▌▪▀▄.▀·
