@@ -116,7 +116,8 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 
 	// Check if CNAME, if so then use this value for checks
 	if len(q1.CNAME) > 0 {
-		q1, err = dnstake.Resolve(client, q1.CNAME[0], 2)
+		hostname = q1.CNAME[0]
+		q1, err = dnstake.Resolve(client, hostname, 2)
 		if err != nil {
 			return vuln, DNS, fmt.Errorf("%s", errors.ErrResolve)
 		}
