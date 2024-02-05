@@ -8,6 +8,9 @@ A fast tool to check missing hosted DNS zones that can lead to subdomain takeove
 
 ---
 
+## New Features
+- CNAME aware (follows CNAMES)
+- Checks hostname against each NS to find that weird one
 
 ## What is a DNS takeover?
 
@@ -87,5 +90,4 @@ Currently supported DNS providers, see [here](https://github.com/indianajson/can
 - https://0xpatrik.com/subdomain-takeover-ns/
 
 # TODO
-- Resolve CNAMEs accordingly
 - Use fasthttp of golang to increase performance 
