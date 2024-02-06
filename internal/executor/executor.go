@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/logrusorgru/aurora"
@@ -231,7 +232,7 @@ func domainAvailable(domains []string) (bool, string, error) {
 				}
 			}
 		} else {
-			gologger.Error().Msg("Timeout from Gandi - either got into rate limit or connectivity issues")
+			gologger.Error().Msgf("%s: Gandi: %s - either got into rate limit or connectivity issues", domain, strconv.Itoa(resp.StatusCode))
 			time.Sleep(60 * time.Second)
 		}
 
