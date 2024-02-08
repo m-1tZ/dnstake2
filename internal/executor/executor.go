@@ -118,7 +118,7 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 		hostname = q1.CNAME[0]
 		// Multiple CNAMEs
 		if len(q1.CNAME) > 1 {
-			// take the last
+			// take the last of the CNAMEs
 			hostname = q1.CNAME[len(q1.CNAME)-1]
 		}
 
