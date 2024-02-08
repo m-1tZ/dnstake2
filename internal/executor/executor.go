@@ -113,8 +113,6 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 		return vuln, DNS, fmt.Errorf("%s", errors.ErrResolve)
 	}
 
-	//fmt.Println(q1)
-
 	// Check if CNAME, if so then use this value for checks
 	if len(q1.CNAME) > 0 {
 		hostname = q1.CNAME[0]
@@ -175,8 +173,6 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 }
 
 func domainAvailable(domains []string) (bool, string, error) {
-	// TODO handle rate limit
-	// TODO dedupe apexdomains to check and save within a structure to prevent checkin this over and over again
 	var dedupedDomains []string
 
 	for _, domain := range domains {
@@ -233,6 +229,8 @@ func domainAvailable(domains []string) (bool, string, error) {
 			}
 		} else {
 			gologger.Error().Msgf("%s: Gandi: %s - either got into rate limit or connectivity issues", domain, strconv.Itoa(resp.StatusCode))
+			// TODO sleep all goroutines
+
 			time.Sleep(60 * time.Second)
 		}
 
