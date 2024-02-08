@@ -116,6 +116,12 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 	// Check if CNAME, if so then use this value for checks
 	if len(q1.CNAME) > 0 {
 		hostname = q1.CNAME[0]
+		// Multiple CNAMEs
+		if len(q1.CNAME) > 1 {
+			// take the last
+			hostname = q1.CNAME[len(q1.CNAME)-1]
+		}
+
 		q1, err = dnstake.Resolve(client, hostname, 2)
 		if err != nil {
 			return vuln, DNS, fmt.Errorf("%s", errors.ErrResolve)
@@ -229,8 +235,6 @@ func domainAvailable(domains []string) (bool, string, error) {
 			}
 		} else {
 			gologger.Error().Msgf("%s: Gandi: %s - either got into rate limit or connectivity issues", domain, strconv.Itoa(resp.StatusCode))
-			// TODO sleep all goroutines
-
 			time.Sleep(60 * time.Second)
 		}
 
