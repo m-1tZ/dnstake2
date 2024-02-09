@@ -115,12 +115,8 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 
 	// Check if CNAME, if so then use this value for checks
 	if len(q1.CNAME) > 0 {
-		hostname = q1.CNAME[0]
-		// Multiple CNAMEs
-		if len(q1.CNAME) > 1 {
-			// take the last of the CNAMEs
-			hostname = q1.CNAME[len(q1.CNAME)-1]
-		}
+		// take the last of the CNAMEs
+		hostname = q1.CNAME[len(q1.CNAME)-1]
 
 		q1, err = dnstake.Resolve(client, hostname, 2)
 		if err != nil {
