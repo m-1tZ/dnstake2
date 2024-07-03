@@ -31,7 +31,7 @@ The ez way! You can download a pre-built binary from [releases page](https://git
 Very quick & clean!
 
 ```bash
-▶ go install github.com/m-1tZ/dnstake2/cmd/dnstake@latest
+▶ go install github.com/m-1tZ/dnstake2@latest
 ```
 
 #### — or
