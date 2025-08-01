@@ -7,5 +7,6 @@ type Options struct {
 	Silent      bool
 	List        []string
 	Output      string
-	GandiApiKey string
+	// GandiApiKey string
+	Availability string
 }

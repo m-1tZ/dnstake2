@@ -77,7 +77,7 @@ func Get() []DNS {
 		{
 			Provider: "Google Cloud",
 			Status:   []int{1},
-			Pattern:  `^ns\-cloud\-[\w]+\.go{2}gledomains\.com$`,
+			Pattern:  `^ns\-cloud\-[\w]+\.googledomains\.com$`,
 		},
 		{
 			Provider: "Hostinger",
@@ -143,6 +143,16 @@ func Get() []DNS {
 			Provider: "Yahoo Small Business",
 			Status:   []int{1},
 			Pattern:  `^yns[1-2]\.yahoo\.com$`,
+		},
+		{
+			Provider: "Hurricane Electric",
+			Status:   []int{1},
+			Pattern:  `^ns[1-5]\.he\.net$`,
+		},
+		{
+			Provider: "Dreamhost",
+			Status:   []int{1},
+			Pattern:  `^ns[1-3]\.dreamhost\.com$`,
 		},
 	}
 }

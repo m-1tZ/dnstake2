@@ -129,7 +129,7 @@ func exec(hostname string) (bool, fingerprint.DNS, error) {
 	}
 
 	// check base domain from ns servers that are not in the list
-	if opts.GandiApiKey != "" {
+	if opts.Availability != "" {
 		matched, matchedDomain, err := domainAvailable(q1.NS)
 		if err != nil {
 			gologger.Error().Msgf("Error in domain availability check: %s", err)
@@ -189,6 +189,68 @@ func domainAvailable(domains []string) (bool, string, error) {
 	}
 
 	for _, domain := range dedupedDomains {
+		apiEndpoint := fmt.Sprintf("https://dns.google/resolve?name=%s", domain)
+		client := &http.Client{}
+
+		req, err := http.NewRequest("GET", apiEndpoint, nil)
+		if err != nil {
+			return false, "", err
+		}
+
+		resp, err := client.Do(req)
+		if err != nil {
+			return false, "", err
+		}
+		defer resp.Body.Close()
+
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return false, "", err
+		}
+
+		if resp.StatusCode == http.StatusOK {
+			var response GoogleDomainAvailabilityResponse
+			err := json.Unmarshal(body, &response)
+			if err != nil {
+				return false, "", err
+			}
+
+			// exist {"Status":0,"TC":false,"RD":true,"RA":true,"AD":false,"CD":false,"Question":[{"name":"testasdf.com.","type":1}],"Answer":[{"name":"testasdf.com.","type":1,"TTL":10800,"data":"13.216.111.180"}],"Comment":"Response from 18.232.142.219."}%
+			// not exist {"Status":3,"TC":false,"RD":true,"RA":true,"AD":false,"CD":false,"Question":[{"name":"ffteslsdfgsdfga.com.","type":1}],"Authority":[{"name":"com.","type":6,"TTL":900,"data":"a.gtld-servers.net. nstld.verisign-grs.com. 1754075540 1800 900 604800 900"}],"Comment":"Response from 192.31.80.30."}
+
+			// Status 3 = NXDOMAIN, i.e., domain does not exist
+			if response.Status == 3 {
+				// No DNS record found, so domain might be available
+				return true, domain, nil
+			}
+			// If there are answers, domain is likely registered
+			if len(response.Answer) > 0 {
+				continue // domain is taken, check the next one
+			}
+		} else {
+			gologger.Error().Msgf("%s: Google DNS: %s - possibly rate-limited or DNS issue", domain, strconv.Itoa(resp.StatusCode))
+			time.Sleep(60 * time.Second)
+		}
+	}
+
+	return false, "", nil
+}
+
+func domainAvailableGandi(domains []string) (bool, string, error) {
+	var dedupedDomains []string
+
+	for _, domain := range domains {
+		apDomain := apexDomain(domain)
+		checked, err := isDomainChecked(db, apDomain)
+		if err != nil {
+			return false, "", err
+		}
+		if !checked {
+			dedupedDomains = append(dedupedDomains, apDomain)
+		}
+	}
+
+	for _, domain := range dedupedDomains {
 		// Gandi.net API endpoint for domain availability check
 		apiEndpoint := fmt.Sprintf("https://api.gandi.net/v5/domain/check?name=%s", domain)
 		// Create an HTTP client
@@ -199,7 +261,7 @@ func domainAvailable(domains []string) (bool, string, error) {
 		if err != nil {
 			return false, "", err
 		}
-		req.Header.Set("Authorization", "Bearer "+opts.GandiApiKey)
+		// req.Header.Set("Authorization", "Bearer "+opts.GandiApiKey)
 
 		// Make the API request
 		resp, err := client.Do(req)
@@ -216,7 +278,7 @@ func domainAvailable(domains []string) (bool, string, error) {
 
 		// Check if the domain is available
 		if resp.StatusCode == http.StatusOK {
-			var response DomainAvailabilityResponse
+			var response GandiDomainAvailabilityResponse
 			err := json.Unmarshal(body, &response)
 			if err != nil {
 				return false, "", err

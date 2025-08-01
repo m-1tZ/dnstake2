@@ -23,8 +23,11 @@ func Parse() *Options {
 	flag.StringVar(&opt.Output, "o", "", "")
 	flag.StringVar(&opt.Output, "output", "", "")
 
-	flag.StringVar(&opt.GandiApiKey, "g", "", "")
-	flag.StringVar(&opt.GandiApiKey, "gandiapikey", "", "")
+	flag.StringVar(&opt.Availability, "a", "", "")
+	flag.StringVar(&opt.Availability, "availability", "", "")
+
+	// flag.StringVar(&opt.GandiApiKey, "g", "", "")
+	// flag.StringVar(&opt.GandiApiKey, "gandiapikey", "", "")
 
 	flag.Usage = func() {
 		showBanner()
