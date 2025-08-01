@@ -65,7 +65,7 @@ Options:
   -c, --concurrent <i>        Set the concurrency level (default: 25)
   -s, --silent                Suppress errors and/or clean output
   -o, --output <FILE>         Save vulnerable hosts to FILE
-  -g, --gandiapikey <APIKEY>  Gandi API Key to check existence of base domain - important
+  -a, --availability          Checks whether the domain is available (dns.google)
   -h, --help                  Display its help
 
 
@@ -73,7 +73,7 @@ Examples:
   dnstake2 -t (sub.)domain.tld
   dnstake2 -t hosts.txt
   dnstake2 -t hosts.txt -o ./dnstake2.out
-  dnstake2 -t hosts.txt -g gandiapikey -o ./dnstake2.out
+  dnstake2 -t hosts.txt -a -o ./dnstake2.out
   cat hosts.txt | dnstake2
   subfinder -silent -d domain.tld | dnstake2
 ```
